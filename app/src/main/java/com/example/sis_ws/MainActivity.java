@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             if(task.isSuccessful()){
                 progressBar.setVisibility(View.GONE);
                 Intent intent = new Intent(getApplicationContext(),Profile.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 finish();
 
