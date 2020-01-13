@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Sign_up extends AppCompatActivity {
 
@@ -52,7 +53,7 @@ public class Sign_up extends AppCompatActivity {
         tvLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(Sign_up.this,MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
@@ -100,7 +101,7 @@ public class Sign_up extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if(task.isSuccessful()) {
-            Toast.makeText(getApplicationContext(),"User Registered Successfully",Toast.LENGTH_SHORT).show();
+                    sendEmailVerification();
 
                 }else{
                     if(task.getException() instanceof FirebaseAuthUserCollisionException){
@@ -115,6 +116,26 @@ public class Sign_up extends AppCompatActivity {
 
 
 
+    }
+    private void sendEmailVerification()
+    {
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser != null)
+        {
+            firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Toast.makeText(getApplicationContext(),"Successfully Registered, verification mail sent!",Toast.LENGTH_LONG).show();
+                        mAuth.signOut();
+                        finish();
+                        startActivity(new Intent(Sign_up.this,MainActivity.class));
+                    }
+                    else
+                        Toast.makeText(Sign_up.this, "Verification mail not sent", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 }

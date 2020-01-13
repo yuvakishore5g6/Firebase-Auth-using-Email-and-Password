@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tvsignup;
     ProgressBar progressBar;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -37,6 +39,17 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         tvsignup = findViewById(R.id.tv_sign_up);
         login = findViewById(R.id.but_login);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if(user != null)
+        {
+            finish();
+            startActivity(new Intent(MainActivity.this,Profile.class));
+        }
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         tvsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Sign_up.class);
+                Intent intent = new Intent(MainActivity.this,Sign_up.class);
                 startActivity(intent);
 
             }
@@ -55,6 +68,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+//    private void checkEmailVerification()
+//    {
+//        FirebaseUser firebaseUser = mAuth.getInstance().getCurrentUser();
+//        Boolean emailflag = firebaseUser.isEmailVerified();
+//
+//        if(emailflag){
+//            startActivity(new Intent(MainActivity.this,Profile.class));
+//
+//        }
+//        else
+//        {
+//            Toast.makeText(getApplicationContext(),"Verify your Email ",Toast.LENGTH_LONG).show();
+//            mAuth.signOut();
+//        }
+
+
     private void userLogin()
     {
         String email = editUserEmail.getText().toString().trim();
@@ -92,11 +121,13 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             if(task.isSuccessful()){
                 progressBar.setVisibility(View.GONE);
-                Intent intent = new Intent(getApplicationContext(),Profile.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-                finish();
+                checkEmailVerification();
+
+//                Intent intent = new Intent(getApplicationContext(),Profile.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                startActivity(intent);
+//                finish();
 
             }
             else
@@ -107,6 +138,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    private void checkEmailVerification() {
+        FirebaseUser firebaseUser = mAuth.getInstance().getCurrentUser();
+        Boolean emailflag = firebaseUser.isEmailVerified();
 
+        if (emailflag)
+        {
+            finish();
+            startActivity(new Intent(MainActivity.this, Profile.class));
+        }
+        else
+            {
+                Toast.makeText(getApplicationContext(), "Verify your email", Toast.LENGTH_LONG).show();
+                mAuth.signOut();
+            }
+        }
 
-}
+    }
+
