@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SIS-WS</string>
+    <string name="Home">This is my home Screen</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="sign_up">Don\'t have account? Sign UP</string>
+    <string name="sign_button">Sign Up</string>
+    <string name="txt_login">Already have an account? Login</string>
+    <string name="home">Welcome to Home Screen</string>
+</resources>
