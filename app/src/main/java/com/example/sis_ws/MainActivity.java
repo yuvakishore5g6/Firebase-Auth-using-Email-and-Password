@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     EditText editUserEmail,editPassword;
     TextView tvsignup;
+    TextView tvforgotPassword;
     ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         tvsignup = findViewById(R.id.tv_sign_up);
         login = findViewById(R.id.but_login);
+        tvforgotPassword = findViewById(R.id.tvforgetpassword);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -65,7 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+    tvforgotPassword.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+            startActivity(new Intent(getApplicationContext(),forgotPasswordActivity.class));
+        }
+    });
 
     }
 //    private void checkEmailVerification()
